@@ -417,8 +417,8 @@ For production wallets, use the official Monero wallet software.
 
 ## Related Projects
 
-- [crypto-utils-js](./crypto-utils.md) - Low-level cryptocurrency utilities
-- [bip39-utils-js](./bip39-utils-js.md) - BIP39/BIP32 HD wallet utilities
+- [crypto-utils-js](https://github.com/bitrequest/crypto-utils-js) - Low-level cryptocurrency utilities
+- [bip39-utils-js](https://github.com/bitrequest/bip39-utils-js) - BIP39/BIP32 HD wallet utilities
 - [bitrequest](https://github.com/bitrequest/bitrequest.github.io) - Cryptocurrency point-of-sale PWA
 
 ---
