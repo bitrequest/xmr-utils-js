@@ -14,6 +14,7 @@ Pure JavaScript Monero (XMR) cryptographic utilities library. Extracted from [bi
 - **Transaction Parsing** - Decode raw transaction hex
 - **Ed25519 Curve** - Pure JS implementation of Curve25519 operations
 - **Cryptographic Hashing** - Keccak-256 (Monero variant), CRC32
+- **Built-in Compatibility Testing** - Verify browser/environment support
 
 ## Live Demo
 
@@ -233,6 +234,62 @@ const decoded = XmrUtils.base58_decode(encoded);
 
 ---
 
+## Compatibility Testing
+
+The library includes built-in test functions to verify browser/environment compatibility before use.
+
+### Quick Compatibility Check
+
+```javascript
+// Check if XMR derivation works
+const results = XmrUtils.test_xmr_compatibility();
+if (results.compatible) {
+	console.log("Environment compatible!");
+}
+```
+
+### Individual Test Functions
+
+```javascript
+// Test spend key → address derivation (standalone)
+XmrUtils.test_xmr_derivation();  // returns true/false
+
+// Test spend key → view key derivation
+XmrUtils.test_xmr_keys();  // returns true/false
+
+// Test address generation
+XmrUtils.test_xmr_address();  // returns true/false
+
+// Full compatibility check (includes CryptoUtils tests)
+XmrUtils.test_xmr_compatibility();
+// Returns: {
+//   compatible: true/false,
+//   crypto_api: true/false,
+//   bigint: true/false,
+//   keys: true/false,
+//   address: true/false,
+//   errors: [],
+//   timing_ms: 12.5
+// }
+```
+
+### Test Constants
+
+The library exposes test vectors derived from the standard [BIP39 test phrase](https://github.com/trezor/python-mnemonic/blob/master/vectors.json): `army van defense carry jealous true garbage claim echo media make crunch`
+
+```javascript
+const TC = XmrUtils.xmr_utils_const;
+
+TC.version          // "1.1.0"
+
+// Derived via BIP44 path m/44'/128'/0'/0/0 + sc_reduce32(fasthash(privkey))
+TC.test_spend_key   // "007d984c3df532fdd86cd83bf42482a5c2e180a51ae1d0096e13048fba1fa108"
+TC.test_view_key    // "e4d63789cdfa2ec48571e93e47520690b2c6e11386c90448e8b357d1cd917c00"
+TC.test_address     // "477h3C6E6C4VLMR36bQL3yLcA8Aq3jts1AHLzm5QXipDdXVCYPnKEvUKykh2GTYqkkeQoTEhWpzvVQ4rMgLM1YpeD6qdHbS"
+```
+
+---
+
 ## API Reference
 
 ### Key Generation
@@ -312,6 +369,22 @@ XmrUtils.xmr_CURVE.Gy  // Base point Y
 XmrUtils.xmr_CURVE.L   // Curve order
 ```
 
+### Testing Functions
+
+| Function | Parameters | Returns | Description |
+|----------|------------|---------|-------------|
+| `test_xmr_derivation` | `[spend_key, expected_address]` | `boolean` | Test spend key → address derivation |
+| `test_xmr_keys` | - | `boolean` | Test spend key → view key derivation |
+| `test_xmr_address` | - | `boolean` | Test address generation |
+| `test_xmr_compatibility` | - | `object` | Full compatibility check with timing |
+
+### Exported Constants
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `xmr_utils_const` | `object` | Test vectors and version info |
+| `xmr_CURVE` | `object` | Ed25519 curve parameters (P, Gx, Gy, L) |
+
 ---
 
 ## Monero Address Formats
@@ -329,7 +402,19 @@ XmrUtils.xmr_CURVE.L   // Curve order
 
 The test suite (`unit_tests_xmr_utils.html`) includes:
 
-### Automated Tests (40+ tests)
+### Automated Tests (56+ tests)
+
+**Built-in Library Tests**
+- `XmrUtils.test_xmr_derivation` - Spend key → address derivation
+- `XmrUtils.test_xmr_keys` - Spend key → view key derivation
+- `XmrUtils.test_xmr_address` - Address generation
+- `XmrUtils.test_xmr_compatibility` - Full compatibility check
+
+**Test Constants Validation**
+- Verify `test_spend_key` produces `test_address`
+- Verify `test_spend_key` produces `test_view_key`
+
+**Unit Tests**
 - Key derivation from BIP39 seeds
 - Address generation and validation
 - Subaddress derivation
@@ -425,7 +510,7 @@ For production wallets, use the official Monero wallet software.
 
 ## License
 
-MIT License
+AGPL-3.0 License
 
 ## Credits
 
