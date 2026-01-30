@@ -8,7 +8,7 @@ Pure JavaScript Monero (XMR) cryptographic utilities library. Extracted from [bi
 
 - **Key Generation** - Generate Monero secret spend keys from BIP39 seeds or random entropy
 - **Address Derivation** - Create main addresses and subaddresses
-- **Mnemonic Support** - Convert secret keys to 25-word Monero mnemonics
+- **Mnemonic Support** - Convert between secret keys and 25-word Monero mnemonics
 - **View Key Extraction** - Parse view keys from addresses for watch-only wallets
 - **Base58 Encoding** - Monero-specific Base58 encoding/decoding
 - **Transaction Parsing** - Decode raw transaction hex
@@ -116,6 +116,24 @@ const keys = XmrUtils.xmr_getpubs(sskBytes, 0);
 // Convert to 25-word Monero mnemonic
 const mnemonic = XmrUtils.secret_spend_key_to_words(sskBytes);
 // "asylum bikini liar fazed hamburger physics opus ..." (25 words)
+```
+
+### Recover Wallet from Monero Mnemonic
+
+```javascript
+// 25-word Monero mnemonic (native format, not BIP39)
+const mnemonic = "western adventure fungal unbending onward odometer husband cobra hotel likewise scrub idled omnibus teeming lettuce rejoices zippers alley firm tadpoles hope tasked obedient oust oust";
+
+// Convert mnemonic back to secret spend key
+const sskBytes = XmrUtils.words_to_secret_spend_key(mnemonic);
+// Validates checksum, throws on invalid input
+
+// Derive full wallet
+const keys = XmrUtils.xmr_getpubs(sskBytes, 0);
+
+console.log(keys.ssk);     // Secret spend key (hex)
+console.log(keys.svk);     // Secret view key (hex)
+console.log(keys.address); // "477h3C6E6C4VLMR36bQL3yLcA8Aq3jts..."
 ```
 
 ### Create Address from Public Keys
@@ -307,6 +325,7 @@ TC.test_address     // "477h3C6E6C4VLMR36bQL3yLcA8Aq3jts1AHLzm5QXipDdXVCYPnKEvUK
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
 | `secret_spend_key_to_words` | `sskBytes` | `string` | Convert to 25-word Monero mnemonic |
+| `words_to_secret_spend_key` | `mnemonic` | `Uint8Array` | Convert 25-word mnemonic to secret spend key |
 
 ### Address Operations
 
@@ -402,7 +421,7 @@ XmrUtils.xmr_CURVE.L   // Curve order
 
 The test suite (`unit_tests_xmr_utils.html`) includes:
 
-### Automated Tests (56+ tests)
+### Automated Tests (63+ tests)
 
 **Built-in Library Tests**
 - `XmrUtils.test_xmr_derivation` - Spend key → address derivation
@@ -418,6 +437,7 @@ The test suite (`unit_tests_xmr_utils.html`) includes:
 - Key derivation from BIP39 seeds
 - Address generation and validation
 - Subaddress derivation
+- Mnemonic conversion (roundtrip, checksum validation)
 - Base58 encode/decode
 - Scalar reduction
 - Elliptic curve operations
@@ -427,15 +447,16 @@ The test suite (`unit_tests_xmr_utils.html`) includes:
 1. **Derive XMR Keys** - Generate keys from secret spend key
 2. **Generate Subaddresses** - Create multiple subaddresses
 3. **SSK to Mnemonic** - Convert secret key to 25 words
-4. **Fasthash (Keccak)** - Test Keccak-256 hashing
-5. **Decode Address** - Parse Monero address components
-6. **Scalar Reduce** - Test sc_reduce32
-7. **Random Wallet** - Generate new random wallet
-8. **Payment ID** - Generate and validate payment IDs
-9. **Base58 Encode** - Test Monero Base58 encoding
-10. **Point Multiply** - Test Ed25519 operations
-11. **CRC32** - Calculate checksums
-12. **Byte Conversion** - Test number/byte utilities
+4. **Mnemonic to SSK** - Recover secret key from 25-word mnemonic
+5. **Fasthash (Keccak)** - Test Keccak-256 hashing
+6. **Decode Address** - Parse Monero address components
+7. **Scalar Reduce** - Test sc_reduce32
+8. **Random Wallet** - Generate new random wallet
+9. **Payment ID** - Generate and validate payment IDs
+10. **Base58 Encode** - Test Monero Base58 encoding
+11. **Point Multiply** - Test Ed25519 operations
+12. **CRC32** - Calculate checksums
+13. **Byte Conversion** - Test number/byte utilities
 
 ---
 
