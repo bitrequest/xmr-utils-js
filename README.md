@@ -12,9 +12,10 @@ Pure JavaScript Monero (XMR) cryptographic utilities library. Extracted from [bi
 - **View Key Extraction** - Parse view keys from addresses for watch-only wallets
 - **Base58 Encoding** - Monero-specific Base58 encoding/decoding
 - **Transaction Parsing** - Decode raw transaction hex
-- **Ed25519 Curve** - Pure JS implementation of Curve25519 operations
 - **Cryptographic Hashing** - Keccak-256 (Monero variant), CRC32
 - **Built-in Compatibility Testing** - Verify browser/environment support
+
+Ed25519 elliptic curve operations are provided by [crypto-utils-js](https://github.com/bitrequest/crypto-utils-js).
 
 ## Live Demo
 
@@ -41,7 +42,7 @@ Then open `unit_tests_xmr_utils.html` in your browser.
 | File | Description |
 |------|-------------|
 | [assets_js_lib_sjcl.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_sjcl.js) | Stanford JavaScript Crypto Library |
-| [assets_js_lib_crypto_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_crypto_utils.js) | Crypto utilities (hashing, encoding) |
+| [assets_js_lib_crypto_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_crypto_utils.js) | Crypto utilities (hashing, encoding, Ed25519) |
 | [assets_js_lib_xmr_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_xmr_utils.js) | Monero cryptographic functions |
 | [unit_tests_xmr_utils.html](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests_xmr_utils.html) | Interactive test suite |
 
@@ -216,10 +217,10 @@ const reduced = XmrUtils.sc_reduce32(hexOrBytes);
 ### Point Multiplication
 
 ```javascript
-// Ed25519 scalar multiplication
+// Ed25519 scalar multiplication (via crypto_utils)
 const scalar = CryptoUtils.hex_to_bytes("...");
-const point = XmrUtils.point_multiply(scalar);
-// Returns point object
+const point = CryptoUtils.ed25519_point_multiply(scalar);
+// Returns EdPoint object
 
 // Convert point to Monero hex format
 const hex = XmrUtils.point_to_monero_hex(point);
@@ -317,7 +318,6 @@ TC.test_address     // "477h3C6E6C4VLMR36bQL3yLcA8Aq3jts1AHLzm5QXipDdXVCYPnKEvUK
 | `get_ssk` | `bip39_seed, is_seed` | `Uint8Array` | Derive secret spend key from BIP39 |
 | `mn_random` | `bits` (128/256) | `string` (hex) | Generate random entropy |
 | `sc_reduce32` | `hex\|bytes` | `Uint8Array` | Reduce to valid Ed25519 scalar |
-| `xmr_get_publickey` | `privateKey` | `string` (hex) | Derive public key from private |
 | `xmr_getpubs` | `ssk, index` | `object` | Generate full key set and address |
 
 ### Mnemonic Functions
@@ -354,21 +354,19 @@ TC.test_address     // "477h3C6E6C4VLMR36bQL3yLcA8Aq3jts1AHLzm5QXipDdXVCYPnKEvUK
 
 ### Elliptic Curve (Ed25519)
 
+Ed25519 operations are provided by [crypto-utils-js](https://github.com/bitrequest/crypto-utils-js). XMR Utils re-exports these for convenience:
+
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
-| `xmr_getpoint` | `hex` | `object` | Decode point from hex |
-| `point_multiply` | `scalar` | `object` | Scalar * base point |
-| `point_to_monero_hex` | `point` | `string` | Encode point to hex |
-| `xmr_invert` | `number, modulo` | `BigInt` | Modular inverse |
-| `xmod` | `a, b` | `BigInt` | Modulo operation |
-| `xpow_mod` | `base, exp, mod` | `BigInt` | Modular exponentiation |
+| `ed25519_point_multiply` | `scalar` | `EdPoint` | Scalar × base point (from crypto_utils) |
+| `EdPoint.fromHex` | `hex` | `EdPoint` | Decode point from hex (from crypto_utils) |
+| `point_to_monero_hex` | `point` | `string` | Encode point to Monero hex format |
 
 ### Byte Conversion
 
 | Function | Parameters | Returns | Description |
 |----------|------------|---------|-------------|
 | `str_to_bin` | `string` | `Uint8Array` | String to bytes |
-| `bytes_to_number_le` | `bytes` | `BigInt` | Little-endian bytes to number |
 | `uint64_to_8be` | `num, size` | `Uint8Array` | Number to big-endian bytes |
 | `uint32_hex` | `num` | `string` | Number to little-endian hex |
 | `xmr_number_to_hex` | `bigint` | `string` | BigInt to padded hex |
@@ -381,11 +379,13 @@ TC.test_address     // "477h3C6E6C4VLMR36bQL3yLcA8Aq3jts1AHLzm5QXipDdXVCYPnKEvUK
 
 ### Constants
 
+Ed25519 curve parameters are available via crypto_utils:
+
 ```javascript
-XmrUtils.xmr_CURVE.P   // Field prime
-XmrUtils.xmr_CURVE.Gx  // Base point X
-XmrUtils.xmr_CURVE.Gy  // Base point Y
-XmrUtils.xmr_CURVE.L   // Curve order
+CryptoUtils.ED25519.P   // Field prime
+CryptoUtils.ED25519.Gx  // Base point X
+CryptoUtils.ED25519.Gy  // Base point Y
+CryptoUtils.ED25519.n   // Curve order
 ```
 
 ### Testing Functions
@@ -402,7 +402,7 @@ XmrUtils.xmr_CURVE.L   // Curve order
 | Property | Type | Description |
 |----------|------|-------------|
 | `xmr_utils_const` | `object` | Test vectors and version info |
-| `xmr_CURVE` | `object` | Ed25519 curve parameters (P, Gx, Gy, L) |
+| `ED25519` | `object` | Ed25519 curve parameters (from crypto_utils) |
 
 ---
 
@@ -454,7 +454,7 @@ The test suite (`unit_tests_xmr_utils.html`) includes:
 8. **Random Wallet** - Generate new random wallet
 9. **Payment ID** - Generate and validate payment IDs
 10. **Base58 Encode** - Test Monero Base58 encoding
-11. **Point Multiply** - Test Ed25519 operations
+11. **Point Multiply** - Test Ed25519 operations (via crypto_utils)
 12. **CRC32** - Calculate checksums
 13. **Byte Conversion** - Test number/byte utilities
 
@@ -464,7 +464,7 @@ The test suite (`unit_tests_xmr_utils.html`) includes:
 
 ### Ed25519 vs secp256k1
 
-Monero uses the **Ed25519** curve (also called Curve25519), which is different from Bitcoin's secp256k1:
+Monero uses the **Ed25519** curve (also called Curve25519), which is different from Bitcoin's secp256k1. The Ed25519 implementation is provided by [crypto-utils-js](https://github.com/bitrequest/crypto-utils-js) and shared with Nimiq and Nano address derivation.
 
 | Property | Ed25519 (Monero) | secp256k1 (Bitcoin) |
 |----------|------------------|---------------------|
@@ -517,7 +517,7 @@ For production wallets, use the official Monero wallet software.
 ## Dependencies
 
 - **sjcl.js** - Stanford JavaScript Crypto Library
-- **crypto_utils.js** - Low-level utilities (keccak256, hex conversion)
+- **crypto_utils.js** - Low-level utilities (keccak256, hex conversion, Ed25519 curve arithmetic)
 
 ---
 
