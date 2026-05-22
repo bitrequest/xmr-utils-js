@@ -41,10 +41,10 @@ Then open `unit_tests_xmr_utils.html` in your browser.
 
 | File | Description |
 |------|-------------|
-| [assets_js_lib_sjcl.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/sjcl.js) | Stanford JavaScript Crypto Library |
-| [assets_js_lib_crypto_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/crypto_utils.js) | Crypto utilities (hashing, encoding, Ed25519) |
-| [assets_js_lib_xmr_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/xmr_utils.js) | Monero cryptographic functions |
-| [unit_tests_xmr_utils.html](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests/xmr_utils.html) | Interactive test suite |
+| [sjcl.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/sjcl.js) | Stanford JavaScript Crypto Library |
+| [crypto_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/crypto_utils.js) | Crypto utilities (hashing, encoding, Ed25519) |
+| [xmr_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/xmr_utils.js) | Monero cryptographic functions |
+| [xmr_utils.html](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests/xmr_utils.html) | Interactive test suite |
 
 ---
 
@@ -53,9 +53,9 @@ Then open `unit_tests_xmr_utils.html` in your browser.
 ### HTML Setup
 
 ```html
-<script src="assets_js_lib_sjcl.js"></script>
-<script src="assets_js_lib_crypto_utils.js"></script>
-<script src="assets_js_lib_xmr_utils.js"></script>
+<script src="xmr_utils/sjcl.js"></script>
+<script src="xmr_utils/crypto_utils.js"></script>
+<script src="xmr_utils/xmr_utils.js"></script>
 ```
 
 ---
