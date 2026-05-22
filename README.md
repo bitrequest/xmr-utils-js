@@ -19,7 +19,7 @@ Ed25519 elliptic curve operations are provided by [crypto-utils-js](https://gith
 
 ## Live Demo
 
-**[🔐 XMR Utils Test Suite](https://bitrequest.github.io/unit_tests_xmr_utils.html)** - Interactive tests and tools
+**[🔐 XMR Utils Test Suite](https://bitrequest.github.io/unit_tests/xmr_utils.html)** - Interactive tests and tools
 
 ---
 
@@ -29,10 +29,10 @@ Ed25519 elliptic curve operations are provided by [crypto-utils-js](https://gith
 
 ```bash
 mkdir xmr_utils && cd xmr_utils && \
-curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests_xmr_utils.html && \
-curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_xmr_utils.js && \
-curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_crypto_utils.js && \
-curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_sjcl.js
+curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests/xmr_utils.html && \
+curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/xmr_utils.js && \
+curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/crypto_utils.js && \
+curl -O https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/sjcl.js
 ```
 
 Then open `unit_tests_xmr_utils.html` in your browser.
@@ -41,10 +41,10 @@ Then open `unit_tests_xmr_utils.html` in your browser.
 
 | File | Description |
 |------|-------------|
-| [assets_js_lib_sjcl.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_sjcl.js) | Stanford JavaScript Crypto Library |
-| [assets_js_lib_crypto_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_crypto_utils.js) | Crypto utilities (hashing, encoding, Ed25519) |
-| [assets_js_lib_xmr_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets_js_lib_xmr_utils.js) | Monero cryptographic functions |
-| [unit_tests_xmr_utils.html](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests_xmr_utils.html) | Interactive test suite |
+| [assets_js_lib_sjcl.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/sjcl.js) | Stanford JavaScript Crypto Library |
+| [assets_js_lib_crypto_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/crypto_utils.js) | Crypto utilities (hashing, encoding, Ed25519) |
+| [assets_js_lib_xmr_utils.js](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/assets/js/lib/xmr_utils.js) | Monero cryptographic functions |
+| [unit_tests_xmr_utils.html](https://raw.githubusercontent.com/bitrequest/bitrequest.github.io/master/unit_tests/xmr_utils.html) | Interactive test suite |
 
 ---
 
